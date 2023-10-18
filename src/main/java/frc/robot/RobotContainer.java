@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -18,8 +19,16 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private final Reach reach = new Reach(); 
+    private final Lift lift = new Lift();
+    private final Intake intake = new Intake();
+    private final ShoulderJoint shoulder = new ShoulderJoint();
+    
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    private final XboxController driver = new XboxController(0);
+    private static XboxController controller = new XboxController(1);
+
+
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -27,7 +36,7 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     /* Subsystems */
@@ -50,6 +59,13 @@ public class RobotContainer {
         configureButtonBindings();
     }
 
+    public boolean Threshold(double axis, double threshold){
+        if(axis>threshold){
+          return true;
+        }
+        return false;
+      }
+
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -59,6 +75,22 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        new Trigger(()->Threshold(controller.getRightTriggerAxis(), 0.5)).whileTrue(new ManualShoulderJoint(shoulder,-1));
+        new Trigger(()->Threshold(controller.getLeftTriggerAxis(), 0.5)).whileTrue(new ManualShoulderJoint(shoulder,1));
+
+
+
+        new POVButton(controller,0).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_TOP"), lift, shoulder, reach));
+        new POVButton(controller,90).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_MID"), lift, shoulder, reach));
+        new POVButton(controller,180).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_INTAKE"), lift, shoulder, reach));
+        new POVButton(controller,270).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_INTAKE_TOP"), lift, shoulder, reach));
+        new JoystickButton(controller, XboxController.Button.kStart.value).onTrue(new UseArmPreset(Constants.ArmPresetList.get("ZERO"), lift, shoulder, reach));
+
+        new JoystickButton(controller,XboxController.Button.kA.value).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_INTAKE_HUMAN"), lift, shoulder, reach));
+        new JoystickButton(controller, XboxController.Button.kRightBumper.value).whileTrue(new ManualLift(lift,-1));
+        new JoystickButton(controller, XboxController.Button.kLeftBumper.value).whileTrue(new ManualLift(lift,1));
+        new JoystickButton(controller, XboxController.Button.kY.value).whileTrue(new RotateWrist(1,intake));
+        new JoystickButton(controller, XboxController.Button.kX.value).whileTrue(new RotateWrist(-1,intake));
     }
 
     /**
