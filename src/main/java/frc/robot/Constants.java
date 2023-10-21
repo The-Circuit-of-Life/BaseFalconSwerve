@@ -67,7 +67,7 @@ public final class Constants {
         tmp.put("CONE_FLOOR", new ArmPreset(0, 0, 0));
         tmp.put("CONE_MID", new ArmPreset(52420, 0, 18459)); 
         tmp.put("CONE_TOP", new ArmPreset(125240, 0, 32467));
-        tmp.put("CONE_INTAKE", new ArmPreset(45097, 0, 0));//45097
+        tmp.put("CONE_INTAKE", new ArmPreset(5929, 0, 48861));//45097
         //tmp.put("CONE_INTAKE_TOP", new ArmPreset(50758, 0, 49154));
         
         tmp.put("CONE_INTAKE_TOP", new ArmPreset(51558, 0, 50500));
@@ -75,7 +75,7 @@ public final class Constants {
         tmp.put("ZERO", new ArmPreset(0, 0, 0));
 
         tmp.put("CUBE_FLOOR", new ArmPreset(0, 0, 0));
-        tmp.put("CUBE_MID", new ArmPreset(117000*.5, 0, 10722));
+        tmp.put("CUBE_MID", new ArmPreset(93174, 0, 6784));
         tmp.put("CUBE_TOP", new ArmPreset(234722*.5, 0, 26300));
 
         tmp.put("CONE_INTAKE_HUMAN", new ArmPreset(154180, 0, 52970));//48
@@ -138,7 +138,7 @@ public final class Constants {
         /* Drive Motor PID Values */
         public static final double driveKP = 0.0000000005; //.05 //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
-        public static final double driveKD = 0.0;
+        public static final double driveKD = 0.1;
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values 
