@@ -67,7 +67,8 @@ public final class Constants {
         tmp.put("CONE_FLOOR", new ArmPreset(0, 0, 0));
         tmp.put("CONE_MID", new ArmPreset(52420, 0, 18459)); 
         tmp.put("CONE_TOP", new ArmPreset(125240, 0, 32467));
-        tmp.put("CONE_INTAKE", new ArmPreset(5929, 0, 48861));//45097
+        
+        tmp.put("CONE_INTAKE", new ArmPreset(37745-13476, 0, 50762-7906));//45097
         //tmp.put("CONE_INTAKE_TOP", new ArmPreset(50758, 0, 49154));
         
         tmp.put("CONE_INTAKE_TOP", new ArmPreset(51558, 0, 50500));
@@ -136,7 +137,7 @@ public final class Constants {
         public static final double angleKF = chosenModule.angleKF;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.0000000005; //.05 //TODO: This must be tuned to specific robot
+        public static final double driveKP = 0.0000000000000000005; //.05 //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.1;
         public static final double driveKF = 0.0;

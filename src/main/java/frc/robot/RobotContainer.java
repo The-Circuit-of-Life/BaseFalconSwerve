@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,8 +23,10 @@ public class RobotContainer {
     private final Reach reach = new Reach(); 
     private final Lift lift = new Lift();
     private final Intake intake = new Intake();
-    private final ShoulderJoint shoulder = new ShoulderJoint();
+    private final ShoulderJoint shoulder;
     
+    DigitalInput limit = new DigitalInput(6);
+
     /* Controllers */
     private final XboxController driver = new XboxController(0);
     private static XboxController controller = new XboxController(1);
@@ -45,6 +48,9 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+
+        shoulder = new ShoulderJoint(limit);
+
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -82,6 +88,7 @@ public class RobotContainer {
 
         new POVButton(controller,0).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_TOP"), lift, shoulder, reach));
         new POVButton(controller,90).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_MID"), lift, shoulder, reach));
+        //what direction:
         new POVButton(controller,180).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_INTAKE"), lift, shoulder, reach));
         new POVButton(controller,270).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_INTAKE_TOP"), lift, shoulder, reach));
         new JoystickButton(controller, XboxController.Button.kStart.value).onTrue(new UseArmPreset(Constants.ArmPresetList.get("ZERO"), lift, shoulder, reach));

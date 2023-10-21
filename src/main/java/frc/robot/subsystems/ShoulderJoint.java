@@ -31,17 +31,20 @@ public class ShoulderJoint extends SubsystemBase {
     private Mode mode;
     private double target;
 
+    DigitalInput limit;
+
     
 
     CANCoderConfiguration _canconfig;
     //constructor
-    public ShoulderJoint(){
+    public ShoulderJoint(DigitalInput limit){
         leftMotor = new TalonFX(Constants.shoulderJointLeftID);
         rightMotor = new TalonFX(Constants.shoulderJointRightID);
 
         leftMotor.configFactoryDefault();
         rightMotor.configFactoryDefault();
         
+        this.limit = limit;
 
         controller = new PIDController(.000008,0.000002,0);
         mode = Mode.MANUAL;
@@ -104,6 +107,13 @@ if(mode==Mode.TARGET){
     double output=controller.calculate(getPosition(),target);
     setSpeed(output);
 }
+
+  SmartDashboard.putBoolean("limit", limit.get());
+
+  if(limit.get()) {
+    leftMotor.setSelectedSensorPosition(0);
+    rightMotor.setSelectedSensorPosition(0);
+  }
 
     
 }
