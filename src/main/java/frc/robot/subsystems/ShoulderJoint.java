@@ -52,8 +52,8 @@ public class ShoulderJoint extends SubsystemBase {
        
         //Encoder setup
         //leftCoder = new CANCoder(Constants.cancoderid);
-        // leftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        // leftMotor.setSelectedSensorPosition(0);
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightMotor.setSelectedSensorPosition(0);
         leftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         leftMotor.setSelectedSensorPosition(0);
         
@@ -94,6 +94,7 @@ public class ShoulderJoint extends SubsystemBase {
         setSpeed(speed*.5);
       }
       public void hold(){
+        SmartDashboard.putBoolean("Hold", true);
         setTarget(getPosition());
       }
     public double getPosition(){

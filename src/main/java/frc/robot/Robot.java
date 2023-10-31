@@ -9,11 +9,16 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+
+import frc.robot.autos.Auto3;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -115,7 +120,8 @@ m_visionThread.start();
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    Command auto3= m_robotContainer.getAuto3();
+    auto3.schedule();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -129,6 +135,8 @@ m_visionThread.start();
 
   @Override
   public void teleopInit() {
+    Pigeon2 gyro = m_robotContainer.s_Swerve.gyro;
+    //m_robotContainer.s_Swerve.gyro.setYaw(90);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
