@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -38,6 +39,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+    SlewRateLimiter joyfilter = new SlewRateLimiter(0.3);
+
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
@@ -54,8 +57,8 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis)/2, 
-                () -> -driver.getRawAxis(strafeAxis)/2, 
+                () -> -driver.getRawAxis(translationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
             )
@@ -81,10 +84,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        new Trigger(()->Threshold(controller.getRightTriggerAxis(), 0.5)).whileTrue(new ManualShoulderJoint(shoulder,-1));
-        new Trigger(()->Threshold(controller.getLeftTriggerAxis(), 0.5)).whileTrue(new ManualShoulderJoint(shoulder,1));
+        new Trigger(()->Threshold(driver.getRightTriggerAxis(), 0.5)).whileTrue(new ManualShoulderJoint(shoulder,-1));
+        new Trigger(()->Threshold(driver.getLeftTriggerAxis(), 0.5)).whileTrue(new ManualShoulderJoint(shoulder,1));
 
-
+        new JoystickButton(driver,XboxController.Button.kA.value).onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
 
         new POVButton(controller,0).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_TOP"), lift, shoulder, reach));
         new POVButton(controller,90).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_MID"), lift, shoulder, reach));
@@ -94,10 +97,10 @@ public class RobotContainer {
         new JoystickButton(controller, XboxController.Button.kStart.value).onTrue(new UseArmPreset(Constants.ArmPresetList.get("ZERO"), lift, shoulder, reach));
 
         new JoystickButton(controller,XboxController.Button.kA.value).onTrue(new UseArmPreset(Constants.ArmPresetList.get("CONE_INTAKE_HUMAN"), lift, shoulder, reach));
-        new JoystickButton(controller, XboxController.Button.kRightBumper.value).whileTrue(new ManualLift(lift,-1));
-        new JoystickButton(controller, XboxController.Button.kLeftBumper.value).whileTrue(new ManualLift(lift,1));
-        new JoystickButton(controller, XboxController.Button.kY.value).whileTrue(new RotateWrist(1,intake));
-        new JoystickButton(controller, XboxController.Button.kX.value).whileTrue(new RotateWrist(-1,intake));
+        new JoystickButton(driver, XboxController.Button.kRightBumper.value).whileTrue(new ManualLift(lift,-1));
+        new JoystickButton(driver, XboxController.Button.kLeftBumper.value).whileTrue(new ManualLift(lift,1));
+        new JoystickButton(driver, XboxController.Button.kY.value).whileTrue(new RotateWrist(1,intake));
+        new JoystickButton(driver, XboxController.Button.kX.value).whileTrue(new RotateWrist(-1,intake));
     }
 
     /**

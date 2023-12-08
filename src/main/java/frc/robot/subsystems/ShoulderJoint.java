@@ -104,16 +104,17 @@ public class ShoulderJoint extends SubsystemBase {
 @Override 
 public void periodic(){
     SmartDashboard.putNumber("shoulder pos", getPosition());
-if(mode==Mode.TARGET){
-    double output=controller.calculate(getPosition(),target);
-    setSpeed(output);
-}
-
+  if(mode==Mode.TARGET){
+    SmartDashboard.putBoolean("targeting", true);
+      double output=controller.calculate(getPosition(),target);
+      setSpeed(output);
+  }
+  SmartDashboard.putBoolean("targeting", false);
   SmartDashboard.putBoolean("limit", limit.get());
 
   if(limit.get()) {
-    leftMotor.setSelectedSensorPosition(0);
-    rightMotor.setSelectedSensorPosition(0);
+    //leftMotor.setSelectedSensorPosition(0);
+    //rightMotor.setSelectedSensorPosition(0);
   }
 
     
